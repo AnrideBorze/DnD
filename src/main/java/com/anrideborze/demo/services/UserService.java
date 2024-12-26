@@ -1,6 +1,7 @@
 package com.anrideborze.demo.services;
 
 import com.anrideborze.demo.entities.User;
+import com.anrideborze.demo.enums.Role;
 import com.anrideborze.demo.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,8 @@ public class UserService {
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
-        user.setRoles(new HashSet<>(Set.of(role)));
+        Role roleEnum = Role.valueOf(role);
+        user.setRoles(new HashSet<>(Set.of(roleEnum)));
 
         return userRepository.save(user);
     }
