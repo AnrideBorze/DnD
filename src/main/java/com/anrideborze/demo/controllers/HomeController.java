@@ -1,13 +1,13 @@
 package com.anrideborze.demo.controllers;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "Welcome to the D&D Profiles API!";
+        return "index";
     }
 }
