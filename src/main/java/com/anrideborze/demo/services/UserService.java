@@ -1,4 +1,4 @@
-package com.anrideborze.demo.servises;
+package com.anrideborze.demo.services;
 
 import com.anrideborze.demo.entities.User;
 import com.anrideborze.demo.repositories.UserRepository;
