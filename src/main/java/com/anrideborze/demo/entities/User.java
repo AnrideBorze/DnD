@@ -1,5 +1,6 @@
 package com.anrideborze.demo.entities;
 
+import com.anrideborze.demo.enums.Role;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -19,15 +20,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private Set<String> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING) // Зберігаємо ролі як строки
+    private Set<Role> roles = new HashSet<>();
 
-    // Getters and Setters
+    // Геттери і сеттери
     public Long getId() {
         return id;
     }
@@ -60,12 +61,16 @@ public class User {
         this.email = email;
     }
 
-    public Set<String> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<String> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
     @Override
