@@ -1,2 +1,11 @@
-package com.anrideborze.demo.dto;public class RegisterRequest {
+package com.anrideborze.demo.dto;
+
+import lombok.Data;
+
+@Data
+public class RegisterRequest {
+    private String username;
+    private String password;
+    private String email;
+    private String role;
 }
