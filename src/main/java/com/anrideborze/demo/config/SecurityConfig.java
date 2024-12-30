@@ -23,8 +23,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // Дозволяємо доступ до статичних ресурсів
-                        .anyRequest().permitAll() // Дозволяємо доступ до всіх сторінок
+                        .requestMatchers("/css/**", "/js/**", "/images/**","/api/auth/register", "/api/auth/login", "/", "login.html").permitAll() // Дозволяємо доступ до статичних ресурсів
+                        .anyRequest().authenticated() // Усі інші запити потребують авторизації
                 )
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable());
