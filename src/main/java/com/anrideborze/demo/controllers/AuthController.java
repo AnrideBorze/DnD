@@ -1,33 +1,33 @@
 package com.anrideborze.demo.controllers;
 
 import com.anrideborze.demo.dto.LoginRequest;
-import com.anrideborze.demo.entities.User;
-import com.anrideborze.demo.repositories.UserRepository;
+import com.anrideborze.demo.dto.RegisterRequest;
 import com.anrideborze.demo.services.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.anrideborze.demo.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    private final AuthService authService;
+    private final UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    @Autowired
-    private AuthService authService;
+    public AuthController(AuthService authService, UserService userService) {
+        this.authService = authService;
+        this.userService = userService;
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         try {
-            User registeredUser = authService.register(user);
+            userService.registerUser(registerRequest);
             return ResponseEntity.ok("User registered successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -35,12 +35,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         try {
-            return ResponseEntity.ok(authService.login(loginRequest));
+            Map<String, Object> response = authService.login(loginRequest);
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
-
-
-
 }
+
