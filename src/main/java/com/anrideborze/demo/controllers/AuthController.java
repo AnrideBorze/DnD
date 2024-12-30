@@ -5,6 +5,7 @@ import com.anrideborze.demo.dto.RegisterRequest;
 import com.anrideborze.demo.entities.User;
 import com.anrideborze.demo.enums.Role;
 import com.anrideborze.demo.repositories.UserRepository;
+import com.anrideborze.demo.services.AuthService;
 import com.anrideborze.demo.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,16 +29,17 @@ public class AuthController {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Autowired
+    private AuthService authService;
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            return ResponseEntity.badRequest().body("Username is already taken.");
+        try {
+            User registeredUser = authService.register(user);
+            return ResponseEntity.ok("User registered successfully!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.addRole(Role.USER); // Додаємо роль USER за замовчуванням
-        userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully!");
     }
 
     @PostMapping("/login")
