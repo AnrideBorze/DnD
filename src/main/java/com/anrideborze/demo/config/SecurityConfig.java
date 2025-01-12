@@ -21,15 +21,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Вимкнення CSRF для спрощення тестування
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**","/api/auth/register", "/api/auth/login", "/", "login.html").permitAll() // Дозволяємо доступ до статичних ресурсів
+                        .requestMatchers("/login.html", "/css/**", "/js/**", "/images/**").permitAll() // Дозволяємо доступ до login.html та статичних ресурсів
                         .anyRequest().authenticated() // Усі інші запити потребують авторизації
                 )
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .formLogin(form -> form.disable());
+                .formLogin(form -> form
+                        .loginPage("/login.html") // Вказуємо кастомну сторінку для авторизації
+                        .defaultSuccessUrl("/", true) // Сторінка перенаправлення після успішного входу
+                        .permitAll() // Дозволяємо доступ до сторінки авторизації
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login.html")
+                        .permitAll()
+                );
         return http.build();
     }
+
 
 
     @Bean
