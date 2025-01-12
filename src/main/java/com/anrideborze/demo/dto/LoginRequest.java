@@ -1,10 +1,16 @@
 package com.anrideborze.demo.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginRequest {
+
+    @NotBlank(message = "Username cannot be blank")
     private String username;
+
+    @NotBlank(message = "Password cannot be blank")
     private String password;
 
-    // Геттери та сеттери
+    // Getters and Setters
     public String getUsername() {
         return username;
     }
