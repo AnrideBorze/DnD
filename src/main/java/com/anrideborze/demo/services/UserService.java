@@ -36,8 +36,8 @@ public class UserService {
 
         // Призначення ролі (за замовчуванням USER, якщо роль не вказана)
         Role roleEnum = registerRequest.getRole() != null
-                ? Role.valueOf(registerRequest.getRole().toUpperCase())
-                : Role.USER;
+                ? registerRequest.getRole() // Оскільки це вже тип Role, додаткове перетворення не потрібне
+                : Role.USER; // Роль за замовчуванням
 
         user.setRoles(new HashSet<>(Set.of(roleEnum)));
 
