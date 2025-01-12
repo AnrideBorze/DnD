@@ -1,12 +1,27 @@
 package com.anrideborze.demo.dto;
 
-public class RegisterRequest {
-    private String username;
-    private String password;
-    private String email;
-    private String role; // Опціонально, якщо роль передається користувачем
+import com.anrideborze.demo.enums.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-    // Геттери і сеттери
+public class RegisterRequest {
+
+    @NotBlank(message = "Username cannot be blank")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    private String username;
+
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min = 6, message = "Password must have at least 6 characters")
+    private String password;
+
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Invalid email format")
+    private String email;
+
+    private Role role = Role.USER; // Default role is USER
+
+    // Getters and Setters
     public String getUsername() {
         return username;
     }
@@ -31,11 +46,11 @@ public class RegisterRequest {
         this.email = email;
     }
 
-    public String getRole() {
+    public Role getRole() { // Використання Role
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) { // Використання Role
         this.role = role;
     }
 }
